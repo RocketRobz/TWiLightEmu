@@ -3,7 +3,7 @@
 </p>
 (Working title, subject to change)
 
-As this is the first emulator of any kind I've developed, I cannot guarentee that everything will work properly, or even work at all.
+As this is the first emulator of any kind I've developed, I cannot guarantee that everything will work properly, or even work at all.
 
 ## Compilation
 

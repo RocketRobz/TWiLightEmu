@@ -48,7 +48,7 @@ int main()
 		// Load header and ARM binaries to emulated main RAM
 		memcpy(dsMainRam+0x3FFE00, &NDSHeader, 0x160); // 0x023FFE00
 
-		const bool arm9dstValid = (NDSHeader.arm7destination >= 0x02000000 && NDSHeader.arm7destination < 0x02400000);
+		const bool arm9dstValid = (NDSHeader.arm9destination >= 0x02000000 && NDSHeader.arm9destination < 0x02400000);
 		const bool arm7dstValid = (NDSHeader.arm7destination >= 0x02000000 && NDSHeader.arm7destination < 0x02400000);
 
 		if (arm9dstValid) {

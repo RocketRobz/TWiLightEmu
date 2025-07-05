@@ -1,20 +1,16 @@
 ﻿#ifndef DS_SYSTEM_H
 #define DS_SYSTEM_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 extern u32 dsArm9Regs[16];
 extern u32 dsArm7Regs[16];
 
-extern u8 dsMainRam[0x400000];
-extern u8 dsVram[0xA4000];
-extern u8 dsSharedWram[0x8000];
-extern u8 dsArm7Wram[0x10000];
+extern u8* dsMainRam;
+extern u8* dsVram;
+extern u8* dsSharedWram;
+extern u8* dsArm7Wram;
 
-#ifdef __cplusplus
-}
-#endif
+extern u32 dsSystem_offsetAdjust(u32 reg);
+extern void dsSystemInit(void);
+extern void dsSystemExit(void);
 
 #endif // DS_SYSTEM_H

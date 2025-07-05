@@ -8,6 +8,7 @@
 
 #include "ndsheaderbanner.h"
 #include "ds_system.h"
+#include "arm_interpreter.h"
 
 u8 sysRegion = CFG_REGION_USA;
 u64 appID = 0;
@@ -38,6 +39,8 @@ int main()
 
 	iprintf("Opening NDS file...\n");
 
+	dsSystemInit();
+
 	sNDSHeaderExt NDSHeader;
 
 	FILE *f_nds_file = fopen("romfs:/hello_world.nds", "rb");
@@ -56,28 +59,38 @@ int main()
 		if (arm9dstValid) {
 			fseek(f_nds_file, NDSHeader.arm9romOffset, SEEK_SET);
 			fread(dsMainRam+NDSHeader.arm9destination, 1, NDSHeader.arm9binarySize, f_nds_file);
+			setArmPc(false, NDSHeader.arm9executeAddress);
 		} else {
 			iprintf("ARM9 destination is not valid!\n");
 		}
 		if (arm7dstValid) {
 			fseek(f_nds_file, NDSHeader.arm7romOffset, SEEK_SET);
 			fread(dsMainRam+NDSHeader.arm7destination, 1, NDSHeader.arm7binarySize, f_nds_file);
+			setArmPc(true, NDSHeader.arm7executeAddress);
 		} else {
 			iprintf("ARM7 destination is not valid!\n");
 		}
 
 		memcpy(&NDSHeader, dsMainRam+0x3FFE00, 0x160); // 0x023FFE00
 		fclose(f_nds_file);
+		iprintf("Running!\n\n");
 	} else {
 		iprintf("Not found!\n");
 	}
 
-	iprintf("\nTo be developed...\n");
-	while (aptMainLoop() && !(hidKeysHeld() & KEY_B)) {
-		hidScanInput();
+	while (aptMainLoop()) {
+		if (!armInterpreter()) {
+			break;
+		}
 		gspWaitForVBlank();
 	}
 
+	iprintf("\nPress B to exit\n");
+	while (aptMainLoop() && !(hidKeysHeld() & KEY_B)) {
+		hidScanInput();
+	}
+
+	dsSystemExit();
 	gfxExit();
 	romfsExit();
 	amExit();

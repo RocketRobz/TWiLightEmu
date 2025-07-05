@@ -1,0 +1,13 @@
+build/
+*.d
+*.o
+*.exe
+*.t3x
+*.3dsx
+*.cia
+*.elf
+*.smdh
+*.map
+*.lst
+app/banner.bin
+app/icon.bin

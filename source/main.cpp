@@ -88,6 +88,7 @@ int main()
 	iprintf("\nPress B to exit\n");
 	while (aptMainLoop() && !(hidKeysHeld() & KEY_B)) {
 		hidScanInput();
+		gspWaitForVBlank();
 	}
 
 	dsSystemExit();

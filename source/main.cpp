@@ -49,19 +49,17 @@ int main()
 		memcpy(dsMainRam+0x3FFE00, &NDSHeader, 0x160); // 0x023FFE00
 
 		const bool arm9dstValid = (NDSHeader.arm7destination >= 0x02000000 && NDSHeader.arm7destination < 0x02400000);
-		NDSHeader.arm9destination -= 0x02000000;
 		const bool arm7dstValid = (NDSHeader.arm7destination >= 0x02000000 && NDSHeader.arm7destination < 0x02400000);
-		NDSHeader.arm7destination -= 0x02000000;
 
 		if (arm9dstValid) {
 			fseek(f_nds_file, NDSHeader.arm9romOffset, SEEK_SET);
-			fread(dsMainRam+NDSHeader.arm9destination, 1, NDSHeader.arm9binarySize, f_nds_file);
+			fread(dsMainRam + (NDSHeader.arm9destination - 0x02000000), 1, NDSHeader.arm9binarySize, f_nds_file);
 		} else {
 			iprintf("ARM9 destination is not valid!\n");
 		}
 		if (arm7dstValid) {
 			fseek(f_nds_file, NDSHeader.arm7romOffset, SEEK_SET);
-			fread(dsMainRam+NDSHeader.arm7destination, 1, NDSHeader.arm7binarySize, f_nds_file);
+			fread(dsMainRam + (NDSHeader.arm7destination - 0x02000000), 1, NDSHeader.arm9binarySize, f_nds_file);
 		} else {
 			iprintf("ARM7 destination is not valid!\n");
 		}

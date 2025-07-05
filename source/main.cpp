@@ -59,7 +59,7 @@ int main()
 		}
 		if (arm7dstValid) {
 			fseek(f_nds_file, NDSHeader.arm7romOffset, SEEK_SET);
-			fread(dsMainRam + (NDSHeader.arm7destination - 0x02000000), 1, NDSHeader.arm9binarySize, f_nds_file);
+			fread(dsMainRam + (NDSHeader.arm7destination - 0x02000000), 1, NDSHeader.arm7binarySize, f_nds_file);
 		} else {
 			iprintf("ARM7 destination is not valid!\n");
 		}

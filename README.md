@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://github.com/RocketRobz/TWiLightEmu/blob/master/resources/banner.png"><br>
+ <img src="https://github.com/RocketRobz/TWiLightEmu/blob/main/resources/banner.png"><br>
 </p>
 (Working title, subject to change)
 

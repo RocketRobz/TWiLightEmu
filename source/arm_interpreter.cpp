@@ -3,6 +3,76 @@
 #include <string.h>
 #include "ds_system.h"
 
+int regL = 0, regR = 0;
+
+u32 fixedRegR;
+
+u16 offsetChange;
+u8 opcodeLastByte;
+
+u32 opcodeAlt;
+
+void opMov() { // mov rL, #?
+	u8 increaseSwitch = 0;
+	while (opcodeAlt >= 0x00000100) {
+		opcodeAlt -= 0x00000100;
+		increaseSwitch++;
+	}
+
+	u32 add = 0;
+	switch (increaseSwitch) {
+		case 0:
+		default:
+			break;
+		case 1:
+			add = 0x40000000;
+			break;
+		case 2:
+			add = 0x10000000;
+			break;
+		case 3:
+			add = 0x4000000;
+			break;
+		case 4:
+			add = 0x1000000;
+			break;
+		case 5:
+			add = 0x400000;
+			break;
+		case 6:
+			add = 0x100000;
+			break;
+		case 7:
+			add = 0x40000;
+			break;
+		case 8:
+			add = 0x10000;
+			break;
+		case 9:
+			add = 0x4000;
+			break;
+		case 0xA:
+			add = 0x1000;
+			break;
+		case 0xB:
+			add = 0x400;
+			break;
+		case 0xC:
+			add = 0x100;
+			break;
+		case 0xD:
+			add = 0x40;
+			break;
+		case 0xE:
+			add = 0x10;
+			break;
+		case 0xF:
+			add = 0x4;
+			break;
+	}
+	dsArm9Regs[regL] = opcodeLastByte*add;
+}
+
 void setArmPc(const bool arm7, const u32 offset) {
 	if (arm7) {
 		dsArm7Regs[15] = offset;
@@ -15,7 +85,6 @@ bool armInterpreter(void) {
 	u32 opcode = dsSystem_offsetAdjust(dsArm9Regs[15]);
 	opcode = *(u32*)opcode;
 
-	int regL = 0, regR = 0;
 	u32 opcodePushPop = opcode;
 
 	{
@@ -47,14 +116,17 @@ bool armInterpreter(void) {
 		}
 	}
 
-	const u32 fixedRegR = dsSystem_offsetAdjust(dsArm9Regs[regR]);
+	fixedRegR = dsSystem_offsetAdjust(dsArm9Regs[regR]);
 
-	const u16 offsetChange = (u16)opcode;
-	const u8 opcodeLastByte = (opcode & 0xFF);
+	offsetChange = (u16)opcode;
+	opcodeLastByte = (opcode & 0xFF);
 
-	u32 opcodeAlt = opcode;
+	opcodeAlt = opcode;
 	opcode -= offsetChange;
 
+	if (opcode == 0x03A00000) { // mov rL, #?
+		opMov();
+	} else
 	if (opcodePushPop == 0x09900003) { // ldmib [rR], r0, r1
 		dsArm9Regs[0] = *(u32*)(fixedRegR+4);
 		dsArm9Regs[1] = *(u32*)(fixedRegR+8);

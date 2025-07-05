@@ -5,7 +5,6 @@ extern u32 dsArm9Regs[16];
 extern u32 dsArm7Regs[16];
 
 extern u8* dsMainRam;
-extern u8* dsVram;
 extern u8* dsSharedWram;
 extern u8* dsArm7Wram;
 

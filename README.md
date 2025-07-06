@@ -5,6 +5,8 @@
 
 As this is the first emulator of any kind I've developed, I cannot guarantee that everything will work properly, or even work at all.
 
+**UPDATE:** Unfortunately, I don't have the patience to continue work on this, lol
+
 ## Compilation
 
 ### Setting up your environment
